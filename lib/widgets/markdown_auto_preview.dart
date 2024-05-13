@@ -4,8 +4,17 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../src/constants.dart';
 import '../src/emoji_input_formatter.dart';
-import 'toolbar.dart';
 import 'markdown_toolbar.dart';
+import 'toolbar.dart';
+
+enum MarkdownToolbarPosition {
+  top,
+  bottom;
+
+  bool get isTop => this == MarkdownToolbarPosition.top;
+
+  bool get isBottom => this == MarkdownToolbarPosition.bottom;
+}
 
 class MarkdownAutoPreview extends StatefulWidget {
   const MarkdownAutoPreview({
@@ -16,7 +25,6 @@ class MarkdownAutoPreview extends StatefulWidget {
     this.style,
     this.onTap,
     this.cursorColor,
-    this.toolbarBackground,
     this.expandableBackground,
     this.maxLines,
     this.minLines,
@@ -29,6 +37,20 @@ class MarkdownAutoPreview extends StatefulWidget {
     this.readOnly = false,
     this.expands = false,
     this.decoration = const InputDecoration(isDense: true),
+    this.focused = true,
+    this.onFocusChanged,
+    this.toolbarPosition = MarkdownToolbarPosition.top,
+    this.toolbarGap = 0.0,
+    this.toolbarDecoration,
+    this.previewDecoration,
+    this.previewPadding,
+    this.showLinkInput = true,
+    this.showImageInput = true,
+    this.showPreviewButton = true,
+    this.showClearButton = true,
+    this.showResetButton = true,
+    this.showSelectSingleLine = true,
+    this.enableOnTapFocus = true,
   });
 
   /// Markdown syntax to reset the field to
@@ -127,14 +149,6 @@ class MarkdownAutoPreview extends StatefulWidget {
   /// The toolbar widget to display when the toolbar is enabled
   ///
   /// When no toolbarBackground widget is provided, the default toolbar color will be displayed
-  /// which has grey[200] color
-  ///
-  ///
-  final Color? toolbarBackground;
-
-  /// The toolbar widget to display when the toolbar is enabled
-  ///
-  /// When no toolbarBackground widget is provided, the default toolbar color will be displayed
   /// which has white color
   ///
   ///
@@ -177,6 +191,72 @@ class MarkdownAutoPreview extends StatefulWidget {
   /// Defaults to false.
   final bool expands;
 
+  /// Whether the text field is focused or not.
+  ///
+  /// If set to true it will set the focus to the text field.
+  ///
+  /// Defaults to false.
+  final bool focused;
+
+  /// Called when the focus is changed.
+  ///
+  /// Returned the [bool] value.
+  final ValueChanged<bool>? onFocusChanged;
+
+  /// Set position of toolbar.
+  ///
+  /// Defaults to [MarkdownToolbarPosition.top].
+  final MarkdownToolbarPosition toolbarPosition;
+
+  /// Set gap between toolbar and text field
+  ///
+  /// Defaults to zero.
+  final double? toolbarGap;
+
+  /// Set toolbar decoration.
+  final BoxDecoration? toolbarDecoration;
+
+  /// Set preview decoration.
+  final BoxDecoration? previewDecoration;
+
+  /// Set preview padding.
+  final EdgeInsets? previewPadding;
+
+  /// Enable Link input
+  ///
+  /// if false, Link input widget will not be displayed
+  final bool showLinkInput;
+
+  /// Enable Image input
+  ///
+  /// if false, Image input widget will not be displayed
+  final bool showImageInput;
+
+  /// Enable Preview button
+  ///
+  /// if false, Preview button widget will not be displayed
+  final bool showPreviewButton;
+
+  /// Enable Clear button
+  ///
+  /// if false, Clear button widget will not be displayed
+  final bool showClearButton;
+
+  /// Enable Reset button
+  ///
+  /// if false, Reset button widget will not be displayed
+  final bool showResetButton;
+
+  /// Enable Select Single Line
+  ///
+  /// if false, Select Single Line widget will not be displayed
+  final bool showSelectSingleLine;
+
+  /// Enable text field focus on tap event
+  ///
+  /// if false, text field will not be focused when tapping on preview text
+  final bool enableOnTapFocus;
+
   @override
   State<MarkdownAutoPreview> createState() => _MarkdownAutoPreviewState();
 }
@@ -195,6 +275,7 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   @override
   void initState() {
     _internalController = widget.controller ?? TextEditingController();
+    _focused = widget.focused;
 
     _toolbar = Toolbar(
       controller: _internalController,
@@ -210,6 +291,13 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
     );
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant MarkdownAutoPreview oldWidget) {
+    _focused = widget.focused;
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -246,25 +334,34 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
         });
 
         if (_focused) _internalFocus.requestFocus(_textFieldFocusNode);
+
+        widget.onFocusChanged?.call(_focused);
       },
       // canRequestFocus: false,
       focusNode: _internalFocus,
       child: _focused
           ? _editorOnFocused()
           : GestureDetector(
-              onTap: () {
-                // Bring widget in widget tree first
-                setState(() {
-                  _focused = true;
-                });
+              onTap: widget.enableOnTapFocus
+                  ? () {
+                      // Bring widget in widget tree first
+                      setState(() {
+                        _focused = true;
+                      });
 
-                // Then request for focus when widget is built
-                _textFieldFocusNode.requestFocus();
-              },
-              child: Align(
-                alignment: Alignment.centerLeft,
+                      // Then request for focus when widget is built
+                      _textFieldFocusNode.requestFocus();
+
+                      widget.onFocusChanged?.call(_focused);
+                    }
+                  : null,
+              child: Container(
+                decoration: widget.previewDecoration,
+                padding: widget.previewPadding,
                 child: MarkdownBody(
                   key: const ValueKey<String>("zmarkdown-parse-body"),
+                  softLineBreak: true,
+                  selectable: true,
                   data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
                 ),
               ),
@@ -279,35 +376,53 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _editor(),
-
               // show toolbar
-              if (!widget.readOnly)
-                MarkdownToolbar(
-                  markdownSyntax: widget.markdownSyntax,
-                  // key: const ValueKey<String>("zmarkdowntoolbar"),
-                  controller: _internalController,
-                  autoCloseAfterSelectEmoji: widget.autoCloseAfterSelectEmoji,
-                  toolbar: _toolbar,
-                  onPreviewChanged: () {
-                    // Remove focus first
-                    _internalFocus.unfocus();
-
-                    // Then remove widget from widget tree
-                    setState(() {
-                      _focused = !_focused;
-                    });
-                  },
-                  unfocus: () {
-                    _internalFocus.unfocus();
-                  },
-                  showEmojiSelection: widget.showEmojiSelection,
-                  emojiConvert: widget.emojiConvert,
-                  toolbarBackground: widget.toolbarBackground,
-                  expandableBackground: widget.expandableBackground,
-                )
+              if (!widget.readOnly && widget.toolbarPosition.isTop) ...[
+                _toolbarWidget(),
+                SizedBox(height: widget.toolbarGap),
+              ],
+              _editor(),
+              // show toolbar
+              if (!widget.readOnly && widget.toolbarPosition.isBottom) ...[
+                SizedBox(height: widget.toolbarGap),
+                _toolbarWidget(),
+              ]
             ],
           );
+  }
+
+  Widget _toolbarWidget() {
+    return MarkdownToolbar(
+      markdownSyntax: widget.markdownSyntax,
+      // key: const ValueKey<String>("zmarkdowntoolbar"),
+      controller: _internalController,
+      autoCloseAfterSelectEmoji: widget.autoCloseAfterSelectEmoji,
+      toolbar: _toolbar,
+      onPreviewChanged: () {
+        // Remove focus first
+        _internalFocus.unfocus();
+
+        // Then remove widget from widget tree
+        setState(() {
+          _focused = !_focused;
+        });
+
+        widget.onFocusChanged?.call(_focused);
+      },
+      unfocus: () {
+        _internalFocus.unfocus();
+      },
+      showEmojiSelection: widget.showEmojiSelection,
+      emojiConvert: widget.emojiConvert,
+      expandableBackground: widget.expandableBackground,
+      decoration: widget.toolbarDecoration,
+      showLinkInput: widget.showLinkInput,
+      showImageInput: widget.showImageInput,
+      showPreviewButton: widget.showPreviewButton,
+      showClearButton: widget.showClearButton,
+      showResetButton: widget.showResetButton,
+      showSelectSingleLine: widget.showSelectSingleLine,
+    );
   }
 
   Widget _editor() {

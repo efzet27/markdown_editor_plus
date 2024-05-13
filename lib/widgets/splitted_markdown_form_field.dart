@@ -16,7 +16,6 @@ class SplittedMarkdownFormField extends StatefulWidget {
     this.style,
     this.onTap,
     this.cursorColor,
-    this.toolbarBackground,
     this.expandableBackground,
     this.maxLines,
     this.minLines,
@@ -32,6 +31,7 @@ class SplittedMarkdownFormField extends StatefulWidget {
     this.autoCloseAfterSelectEmoji = true,
     this.textCapitalization = TextCapitalization.sentences,
     this.decoration = const InputDecoration(isDense: true),
+    this.toolbarDecoration,
   });
 
   /// Markdown syntax to reset the field to
@@ -130,12 +130,6 @@ class SplittedMarkdownFormField extends StatefulWidget {
   /// The toolbar widget to display when the toolbar is enabled
   ///
   /// When no toolbarBackground widget is provided, the default toolbar color will be displayed
-  /// which has grey[200] color
-  final Color? toolbarBackground;
-
-  /// The toolbar widget to display when the toolbar is enabled
-  ///
-  /// When no toolbarBackground widget is provided, the default toolbar color will be displayed
   /// which has white color
   final Color? expandableBackground;
 
@@ -196,6 +190,9 @@ class SplittedMarkdownFormField extends StatefulWidget {
   ///
   /// For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
   final void Function(String?)? onSaved;
+
+  /// Set toolbar decoration.
+  final BoxDecoration? toolbarDecoration;
 
   @override
   State<SplittedMarkdownFormField> createState() => _SplittedMarkdownFormFieldState();
@@ -304,13 +301,13 @@ class _SplittedMarkdownFormFieldState extends State<SplittedMarkdownFormField> {
                   controller: _internalController,
                   autoCloseAfterSelectEmoji: widget.autoCloseAfterSelectEmoji,
                   emojiConvert: widget.emojiConvert,
-                  toolbarBackground: widget.toolbarBackground,
                   expandableBackground: widget.expandableBackground,
                   toolbar: _toolbar,
                   onActionCompleted: () {
                     setState(() {});
                   },
                   showEmojiSelection: widget.showEmojiSelection,
+                  decoration: widget.toolbarDecoration,
                 )
             ],
           );

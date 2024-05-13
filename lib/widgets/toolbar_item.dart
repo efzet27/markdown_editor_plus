@@ -59,7 +59,10 @@ class ToolbarItem extends StatelessWidget {
                 ),
               ),
               expanded: Container(
-                color: expandableBackground ?? Colors.white,
+                decoration: BoxDecoration(
+                  color: expandableBackground ?? Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: const NeverScrollableScrollPhysics(),

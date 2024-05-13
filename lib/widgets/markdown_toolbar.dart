@@ -14,12 +14,17 @@ class MarkdownToolbar extends StatelessWidget {
   final bool emojiConvert;
   final bool autoCloseAfterSelectEmoji;
   final Toolbar toolbar;
-  final Color? toolbarBackground;
   final Color? expandableBackground;
   final bool showPreviewButton;
   final bool showEmojiSelection;
   final VoidCallback? onActionCompleted;
   final String? markdownSyntax;
+  final BoxDecoration? decoration;
+  final bool showLinkInput;
+  final bool showImageInput;
+  final bool showClearButton;
+  final bool showResetButton;
+  final bool showSelectSingleLine;
 
   const MarkdownToolbar({
     super.key,
@@ -30,19 +35,27 @@ class MarkdownToolbar extends StatelessWidget {
     this.unfocus,
     required this.toolbar,
     this.autoCloseAfterSelectEmoji = true,
-    this.toolbarBackground,
     this.expandableBackground,
     this.onActionCompleted,
     this.showPreviewButton = true,
     this.showEmojiSelection = true,
+    this.decoration,
+    this.showLinkInput = true,
+    this.showImageInput = true,
+    this.showClearButton = true,
+    this.showResetButton = true,
+    this.showSelectSingleLine = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: toolbarBackground ?? Colors.grey[200],
       width: double.maxFinite,
       height: 45,
+      decoration: decoration ?? BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -55,8 +68,8 @@ class MarkdownToolbar extends StatelessWidget {
                 onPressedButton: onPreviewChanged,
                 tooltip: 'Show/Hide markdown preview',
               ),
-
             // Clear the field
+            if (showClearButton)
             ToolbarItem(
               key: const ValueKey<String>("toolbar_clear_action"),
               icon: FontAwesomeIcons.trashCan,
@@ -66,7 +79,7 @@ class MarkdownToolbar extends StatelessWidget {
               },
               tooltip: 'Clear the text field',
             ),
-
+            if (showResetButton)
             // Reset the text field
             ToolbarItem(
               key: const ValueKey<String>("toolbar_reset_action"),
@@ -79,7 +92,7 @@ class MarkdownToolbar extends StatelessWidget {
               },
               tooltip: 'Reset the text field to specified format',
             ),
-
+            if (showSelectSingleLine)
             // select single line
             ToolbarItem(
               key: const ValueKey<String>("toolbar_selection_action"),
@@ -215,6 +228,7 @@ class MarkdownToolbar extends StatelessWidget {
                 },
               ),
             // link
+            if (showLinkInput)
             ToolbarItem(
               key: const ValueKey<String>("toolbar_link_action"),
               icon: FontAwesomeIcons.link,
@@ -230,6 +244,7 @@ class MarkdownToolbar extends StatelessWidget {
               },
             ),
             // image
+            if (showImageInput)
             ToolbarItem(
               key: const ValueKey<String>("toolbar_image_action"),
               icon: FontAwesomeIcons.image,
