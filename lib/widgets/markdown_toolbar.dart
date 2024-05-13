@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../src/toolbar.dart';
-import 'modal_select_emoji.dart';
+
+import 'toolbar.dart';
 import 'modal_input_url.dart';
+import 'modal_select_emoji.dart';
 import 'toolbar_item.dart';
 
 class MarkdownToolbar extends StatelessWidget {
@@ -21,7 +22,7 @@ class MarkdownToolbar extends StatelessWidget {
   final String? markdownSyntax;
 
   const MarkdownToolbar({
-    Key? key,
+    super.key,
     this.onPreviewChanged,
     this.markdownSyntax,
     required this.controller,
@@ -34,7 +35,7 @@ class MarkdownToolbar extends StatelessWidget {
     this.onActionCompleted,
     this.showPreviewButton = true,
     this.showEmojiSelection = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -222,8 +223,7 @@ class MarkdownToolbar extends StatelessWidget {
                 if (toolbar.hasSelection) {
                   toolbar.action("[enter link description here](", ")");
                 } else {
-                  await _showModalInputUrl(context,
-                      "[enter link description here](", controller.selection);
+                  await _showModalInputUrl(context, "[enter link description here](", controller.selection);
                 }
 
                 onActionCompleted?.call();
@@ -285,8 +285,7 @@ class MarkdownToolbar extends StatelessWidget {
   }
 
   // Show modal to select emoji
-  Future<dynamic> _showModalSelectEmoji(
-      BuildContext context, TextSelection selection) {
+  Future<dynamic> _showModalSelectEmoji(BuildContext context, TextSelection selection) {
     return showModalBottomSheet(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

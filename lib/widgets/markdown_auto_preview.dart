@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+
 import '../src/constants.dart';
 import '../src/emoji_input_formatter.dart';
-import '../src/toolbar.dart';
+import 'toolbar.dart';
 import 'markdown_toolbar.dart';
 
 class MarkdownAutoPreview extends StatefulWidget {
   const MarkdownAutoPreview({
-    Key? key,
+    super.key,
     this.controller,
     this.scrollController,
     this.onChanged,
@@ -28,7 +29,7 @@ class MarkdownAutoPreview extends StatefulWidget {
     this.readOnly = false,
     this.expands = false,
     this.decoration = const InputDecoration(isDense: true),
-  }) : super(key: key);
+  });
 
   /// Markdown syntax to reset the field to
   ///
@@ -184,10 +185,8 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   // Internal parameter
   late TextEditingController _internalController;
 
-  final FocusScopeNode _internalFocus =
-      FocusScopeNode(debugLabel: '_internalFocus');
-  final FocusNode _textFieldFocusNode =
-      FocusNode(debugLabel: '_textFieldFocusNode');
+  final FocusScopeNode _internalFocus = FocusScopeNode(debugLabel: '_internalFocus');
+  final FocusNode _textFieldFocusNode = FocusNode(debugLabel: '_textFieldFocusNode');
 
   late Toolbar _toolbar;
 
@@ -217,10 +216,8 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   Widget build(BuildContext context) {
     return FocusableActionDetector(
       shortcuts: {
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB):
-            BoldTextIntent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI):
-            ItalicTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB): BoldTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI): ItalicTextIntent(),
       },
       actions: {
         BoldTextIntent: CallbackAction<BoldTextIntent>(
@@ -268,9 +265,7 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
                 alignment: Alignment.centerLeft,
                 child: MarkdownBody(
                   key: const ValueKey<String>("zmarkdown-parse-body"),
-                  data: _internalController.text == ""
-                      ? "_Markdown text_"
-                      : _internalController.text,
+                  data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
                 ),
               ),
             ),

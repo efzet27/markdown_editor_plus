@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown_editor_plus/src/toolbar.dart';
+
 import '../src/constants.dart';
 import '../src/emoji_input_formatter.dart';
 import 'markdown_toolbar.dart';
+import 'toolbar.dart';
 
 class SplittedMarkdownFormField extends StatefulWidget {
   const SplittedMarkdownFormField({
-    Key? key,
+    super.key,
     this.controller,
     this.scrollController,
     this.onChanged,
@@ -31,7 +32,7 @@ class SplittedMarkdownFormField extends StatefulWidget {
     this.autoCloseAfterSelectEmoji = true,
     this.textCapitalization = TextCapitalization.sentences,
     this.decoration = const InputDecoration(isDense: true),
-  }) : super(key: key);
+  });
 
   /// Markdown syntax to reset the field to
   ///
@@ -197,8 +198,7 @@ class SplittedMarkdownFormField extends StatefulWidget {
   final void Function(String?)? onSaved;
 
   @override
-  State<SplittedMarkdownFormField> createState() =>
-      _SplittedMarkdownFormFieldState();
+  State<SplittedMarkdownFormField> createState() => _SplittedMarkdownFormFieldState();
 }
 
 class _SplittedMarkdownFormFieldState extends State<SplittedMarkdownFormField> {
@@ -225,10 +225,8 @@ class _SplittedMarkdownFormFieldState extends State<SplittedMarkdownFormField> {
   Widget build(BuildContext context) {
     return FocusableActionDetector(
       shortcuts: {
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB):
-            BoldTextIntent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI):
-            ItalicTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB): BoldTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI): ItalicTextIntent(),
       },
       actions: {
         BoldTextIntent: CallbackAction<BoldTextIntent>(
@@ -290,9 +288,7 @@ class _SplittedMarkdownFormFieldState extends State<SplittedMarkdownFormField> {
                   Expanded(
                     child: MarkdownBody(
                       // key: const ValueKey<String>("zmarkdown-parse-body"),
-                      data: _internalController.text == ""
-                          ? "_Markdown text_"
-                          : _internalController.text,
+                      data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
                       selectable: true,
                     ),
                   ),

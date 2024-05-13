@@ -21,11 +21,9 @@ class Toolbar {
   /// Returns true if  controller contains selection text
   ///
   /// else returns false
-  bool get hasSelection =>
-      (controller.selection.baseOffset - controller.selection.extentOffset) !=
-      0;
+  bool get hasSelection => (controller.selection.baseOffset - controller.selection.extentOffset) != 0;
 
-  // get selection text pffset
+  // get selection text offset
   TextSelection getSelection(TextSelection selection) {
     return !selection.isValid
         ? selection.copyWith(
@@ -60,25 +58,21 @@ class Toolbar {
 
     // check if middle text have char \n
     if (middle.split("\n").length > 1) {
-      ToolbarResult result =
-          _multiLineFormating(left, middle, right, selection.extentOffset);
+      ToolbarResult result = _multiLineFormating(left, middle, right, selection.extentOffset);
       selectionText = result.text;
       baseOffset = result.baseOffset;
       extentOffset = result.extentOffset;
     }
 
     // check if middle not have char \n
-    if (middle.contains(left) &&
-        middle.contains(right) &&
-        middle.split("\n").length < 2) {
+    if (middle.contains(left) && middle.contains(right) && middle.split("\n").length < 2) {
       selectionText = middle.replaceFirst(left, "").replaceFirst(right, "");
       baseOffset = middle.length - (left.length + right.length);
       extentOffset = selection.extentOffset - (left.length + right.length);
     }
 
-    final String newTextValue = selection.textBefore(currentTextValue) +
-        selectionText +
-        selection.textAfter(currentTextValue);
+    final String newTextValue =
+        selection.textBefore(currentTextValue) + selectionText + selection.textAfter(currentTextValue);
 
     // print(selection.extentOffset - (left.length + right.length));
 
@@ -151,8 +145,7 @@ class Toolbar {
     textBefore = textBefore.split("\n").last;
     textAfter = textAfter.split("\n")[0];
 
-    final int firstTextPosition =
-        controller.text.indexOf(textBefore + textAfter);
+    final int firstTextPosition = controller.text.indexOf(textBefore + textAfter);
     controller.value = controller.value.copyWith(
       selection: TextSelection(
         baseOffset: firstTextPosition,

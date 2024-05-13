@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:markdown/markdown.dart' as md;
+
 import '../src/markdown_syntax.dart';
 import 'image_network.dart';
 
@@ -10,7 +11,7 @@ typedef MarkdownTapTagCallback = void Function(String name, String fullText);
 class MarkdownParseBody extends StatelessWidget {
   /// Creates a non-scrolling widget that parses and displays Markdown.
   const MarkdownParseBody({
-    Key? key,
+    super.key,
     required this.data,
     this.onTapLink,
     this.onTapHastag,
@@ -27,7 +28,7 @@ class MarkdownParseBody extends StatelessWidget {
     this.inlineSyntaxes,
     this.blockSyntaxes,
     this.checkboxIconSize,
-  }) : super(key: key);
+  });
 
   /// The string markdown to display.
   final String data;
@@ -102,9 +103,8 @@ class MarkdownParseBody extends StatelessWidget {
         shrinkWrap: shrinkWrap,
         syntaxHighlighter: syntaxHighlighter,
         bulletBuilder: bulletBuilder ??
-            (int number, BulletStyle style) {
-              double? fontSize =
-                  Theme.of(context).textTheme.bodyText2?.fontSize;
+            (parameters) {
+              double? fontSize = Theme.of(context).textTheme.bodyMedium?.fontSize;
               return Text(
                 "◉",
                 textAlign: TextAlign.center,
@@ -117,21 +117,10 @@ class MarkdownParseBody extends StatelessWidget {
         styleSheetTheme: styleSheetTheme,
         extensionSet: md.ExtensionSet(
           md.ExtensionSet.gitHubFlavored.blockSyntaxes,
-          [
-            md.EmojiSyntax(),
-            md.AutolinkExtensionSyntax(),
-            ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
-          ],
+          [md.EmojiSyntax(), md.AutolinkExtensionSyntax(), ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes],
         ),
-        blockSyntaxes: [
-          const md.FencedCodeBlockSyntax(),
-          if (blockSyntaxes != null) ...blockSyntaxes!
-        ],
-        inlineSyntaxes: [
-          ColoredHastagSyntax(),
-          ColoredMentionSyntax(),
-          if (inlineSyntaxes != null) ...inlineSyntaxes!
-        ],
+        blockSyntaxes: [const md.FencedCodeBlockSyntax(), if (blockSyntaxes != null) ...blockSyntaxes!],
+        inlineSyntaxes: [ColoredHastagSyntax(), ColoredMentionSyntax(), if (inlineSyntaxes != null) ...inlineSyntaxes!],
         builders: {
           "hastag": ColoredHastagElementBuilder(onTapHastag),
           "mention": ColoredMentionElementBuilder(onTapMention),
@@ -151,8 +140,7 @@ class MarkdownParseBody extends StatelessWidget {
                   ),
                 ),
               ),
-              blockquotePadding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+              blockquotePadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
             ),
         onTapLink: onTapLink,
         imageBuilder: imageBuilder ??
@@ -165,11 +153,8 @@ class MarkdownParseBody extends StatelessWidget {
         checkboxBuilder: checkboxBuilder ??
             (bool value) {
               return FaIcon(
-                value
-                    ? FontAwesomeIcons.solidSquareCheck
-                    : FontAwesomeIcons.square,
-                size: checkboxIconSize ??
-                    Theme.of(context).textTheme.bodyText2?.fontSize,
+                value ? FontAwesomeIcons.solidSquareCheck : FontAwesomeIcons.square,
+                size: checkboxIconSize ?? Theme.of(context).textTheme.bodyMedium?.fontSize,
                 color: value ? Colors.blue[600] : Colors.grey,
               );
             },

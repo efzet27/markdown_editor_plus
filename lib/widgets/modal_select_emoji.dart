@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../src/emoji_parser.dart';
 
 class ModalSelectEmoji extends StatefulWidget {
   const ModalSelectEmoji({
-    Key? key,
+    super.key,
     this.onChanged,
     this.emojiConvert = true,
-  }) : super(key: key);
+  });
 
   final bool emojiConvert;
   final ValueChanged<String>? onChanged;
@@ -176,15 +177,10 @@ class _ModalSelectEmojiState extends State<ModalSelectEmoji> {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 8,
         ),
-        itemCount: _emoticons
-            .where((element) =>
-                element.toLowerCase().contains(_search.toLowerCase()))
-            .length,
+        itemCount: _emoticons.where((element) => element.toLowerCase().contains(_search.toLowerCase())).length,
         itemBuilder: (context, index) {
-          var emot = _emoticons
-              .where((element) =>
-                  element.toLowerCase().contains(_search.toLowerCase()))
-              .elementAt(index);
+          var emot =
+              _emoticons.where((element) => element.toLowerCase().contains(_search.toLowerCase())).elementAt(index);
 
           return TextButton(
             key: ValueKey<String>("${index}_${emot.replaceAll(":", "")}"),

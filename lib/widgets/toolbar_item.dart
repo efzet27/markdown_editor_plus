@@ -4,14 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ToolbarItem extends StatelessWidget {
   const ToolbarItem({
-    Key? key,
+    super.key,
     required this.icon,
     this.onPressedButton,
     this.tooltip,
     this.isExpandable = false,
     this.items,
     this.expandableBackground,
-  }) : super(key: key);
+  });
 
   final dynamic icon;
   final VoidCallback? onPressedButton;

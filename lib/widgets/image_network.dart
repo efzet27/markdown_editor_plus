@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ImageNetworkMarkdown extends StatelessWidget {
   const ImageNetworkMarkdown({
-    Key? key,
+    super.key,
     required this.uri,
     this.title,
-  }) : super(key: key);
+  });
 
   final String uri;
   final String? title;
@@ -31,9 +31,9 @@ class ImageNetworkMarkdown extends StatelessWidget {
         height: 220,
         color: Colors.grey[200],
         alignment: Alignment.center,
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             FaIcon(FontAwesomeIcons.triangleExclamation),
             SizedBox(height: 20),
             Text(

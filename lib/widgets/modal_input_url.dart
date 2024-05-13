@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:markdown_editor_plus/src/toolbar.dart';
+
+import 'toolbar.dart';
 
 class ModalInputUrl extends StatelessWidget {
   const ModalInputUrl({
-    Key? key,
+    super.key,
     required this.toolbar,
     required this.leftText,
     required this.selection,
     this.onActionCompleted,
-  }) : super(key: key);
+  });
 
   final Toolbar toolbar;
   final String leftText;
@@ -68,7 +69,7 @@ class ModalInputUrl extends StatelessWidget {
                   ),
                 );
               } else {
-                if (!value.contains(RegExp(r'https?:\/\/(www.)?([^\s]+)'))) {
+                if (!value.contains(RegExp(r'https?://(www.)?(\S+)'))) {
                   value = "http://$value";
                 }
                 toolbar.action(

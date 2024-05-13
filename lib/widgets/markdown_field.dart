@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../src/emoji_input_formatter.dart';
 
 class MarkdownField extends StatelessWidget {
   const MarkdownField({
-    Key? key,
+    super.key,
     this.controller,
     this.scrollController,
     this.onChanged,
@@ -17,10 +18,9 @@ class MarkdownField extends StatelessWidget {
     this.maxLines,
     this.minLines,
     this.expands = false,
-    this.decoration =
-        const InputDecoration(hintText: 'Type here...', isDense: true),
+    this.decoration = const InputDecoration(hintText: 'Type here...', isDense: true),
     this.padding = const EdgeInsets.all(8),
-  }) : super(key: key);
+  });
 
   /// Controls the text being edited.
   ///
@@ -140,12 +140,6 @@ class MarkdownField extends StatelessWidget {
         inputFormatters: [
           if (emojiConvert) EmojiInputFormatter(),
         ],
-        toolbarOptions: const ToolbarOptions(
-          copy: true,
-          paste: true,
-          cut: true,
-          selectAll: true,
-        ),
         decoration: decoration,
       ),
     );
