@@ -116,7 +116,7 @@ class MarkdownParse extends StatelessWidget {
       shrinkWrap: shrinkWrap,
       syntaxHighlighter: syntaxHighlighter,
       bulletBuilder: bulletBuilder ??
-          (parameters) {
+          (index, style) {
             double? fontSize = Theme.of(context).textTheme.bodyMedium?.fontSize;
             return Text(
               "◉",
