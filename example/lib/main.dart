@@ -68,7 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
               showImageInput: false,
               enableOnTapFocus: false,
               onFocusChanged: (value) {
-                _focused = value;
+                setState(() {
+                  _focused = value;
+                });
               },
               previewPadding: const EdgeInsets.all(6),
               previewDecoration: BoxDecoration(

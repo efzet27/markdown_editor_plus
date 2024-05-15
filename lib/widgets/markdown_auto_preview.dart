@@ -280,13 +280,13 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
     _toolbar = Toolbar(
       controller: _internalController,
       bringEditorToFocus: () {
-        if (!_textFieldFocusNode.hasFocus) {
-          setState(() {
-            _focused = true;
-          });
-
-          _textFieldFocusNode.requestFocus();
-        }
+        // if (!_textFieldFocusNode.hasFocus) {
+        //   setState(() {
+        //     _focused = true;
+        //   });
+        //
+        //   _textFieldFocusNode.requestFocus();
+        // }
       },
     );
 
@@ -328,15 +328,15 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
         ),
       },
 
-      onFocusChange: (focus) {
-        setState(() {
-          _focused = focus;
-        });
-
-        if (_focused) _internalFocus.requestFocus(_textFieldFocusNode);
-
-        widget.onFocusChanged?.call(_focused);
-      },
+      // onFocusChange: (focus) {
+      //   setState(() {
+      //     _focused = focus;
+      //   });
+      //
+      //   if (_focused) _internalFocus.requestFocus(_textFieldFocusNode);
+      //
+      //   widget.onFocusChanged?.call(_focused);
+      // },
       // canRequestFocus: false,
       focusNode: _internalFocus,
       child: _focused
@@ -344,15 +344,15 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
           : GestureDetector(
               onTap: widget.enableOnTapFocus
                   ? () {
-                      // Bring widget in widget tree first
-                      setState(() {
-                        _focused = true;
-                      });
-
-                      // Then request for focus when widget is built
-                      _textFieldFocusNode.requestFocus();
-
-                      widget.onFocusChanged?.call(_focused);
+                      // // Bring widget in widget tree first
+                      // setState(() {
+                      //   _focused = true;
+                      // });
+                      //
+                      // // Then request for focus when widget is built
+                      // _textFieldFocusNode.requestFocus();
+                      //
+                      // widget.onFocusChanged?.call(_focused);
                     }
                   : null,
               child: Container(
