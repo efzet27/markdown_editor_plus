@@ -40,73 +40,98 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Home Screen"),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Switch.adaptive(
-                  value: _focused,
-                  inactiveTrackColor: Colors.blue,
-                  thumbIcon: MaterialStateProperty.all(Icon(_focused ? Icons.edit : Icons.visibility)),
-                  onChanged: (value) => setState(() => _focused = value),
-                ),
-              ],
+      body: Column(
+        children: [
+          Container(
+            height: 80,
+            color: Colors.blue,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 80,
+                    color: Colors.green,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Switch(
+                        value: _focused,
+                        inactiveTrackColor: Colors.blue,
+                        activeTrackColor: Colors.green,
+                        activeColor: Colors.white,
+                        trackOutlineColor: MaterialStateProperty.all(_focused ? Colors.green : Colors.blue),
+                        trackOutlineWidth: MaterialStateProperty.all(10),
+                        thumbIcon: MaterialStateProperty.all(Icon(
+                          _focused ? Icons.edit : Icons.visibility,
+                          color: _focused ? Colors.green : Colors.blue,
+                        )),
+                        onChanged: (value) => setState(() => _focused = value),
+                      ),
+                    ],
+                  ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: _focused ? 445 + 6 : 400,
+                      maxHeight: _focused ? 445 + 6 : 400,
+                    ),
+                    child: MarkdownAutoPreview(
+                      expands: true,
+                      enableToolBar: _focused,
+                      focused: _focused,
+                      toolbarGap: 6,
+                      showPreviewButton: false,
+                      showClearButton: false,
+                      showResetButton: false,
+                      showSelectSingleLine: false,
+                      showEmojiSelection: false,
+                      showLinkInput: false,
+                      showImageInput: false,
+                      enableOnTapFocus: false,
+                      onFocusChanged: (value) => setState(() => _focused = value),
+                      previewPadding: const EdgeInsets.all(12),
+                      previewDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      toolbarDecoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      decoration: const InputDecoration(
+                        isDense: false,
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            MarkdownAutoPreview(
-              controller: _controller,
-              focused: _focused,
-              toolbarGap: 6,
-              showPreviewButton: false,
-              showClearButton: false,
-              showResetButton: false,
-              showSelectSingleLine: false,
-              showEmojiSelection: false,
-              showLinkInput: false,
-              showImageInput: false,
-              enableOnTapFocus: false,
-              onFocusChanged: (value) {
-                setState(() {
-                  _focused = value;
-                });
-              },
-              previewPadding: const EdgeInsets.all(6),
-              previewDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.grey),
-              ),
-              toolbarDecoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              decoration: const InputDecoration(
-                isDense: false,
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

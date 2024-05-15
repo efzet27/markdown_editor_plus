@@ -381,7 +381,7 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
                 _toolbarWidget(),
                 SizedBox(height: widget.toolbarGap),
               ],
-              _editor(),
+              if (widget.expands) Expanded(child: _editor()) else _editor(),
               // show toolbar
               if (!widget.readOnly && widget.toolbarPosition.isBottom) ...[
                 SizedBox(height: widget.toolbarGap),
@@ -427,6 +427,7 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
 
   Widget _editor() {
     return TextField(
+      textAlignVertical: TextAlignVertical.top,
       controller: _internalController,
       focusNode: _textFieldFocusNode,
       cursorColor: widget.cursorColor,
