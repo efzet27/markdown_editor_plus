@@ -358,6 +358,7 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
               child: Container(
                 decoration: widget.previewDecoration,
                 padding: widget.previewPadding,
+                height: widget.expands ? double.infinity : null,
                 child: MarkdownBody(
                   key: const ValueKey<String>("zmarkdown-parse-body"),
                   softLineBreak: true,

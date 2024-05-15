@@ -36,6 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height - 320;
+    final minHeight = _focused ? 320.0 + 45 + 6 : 320.0;
+    var maxHeight = _focused ? height + 45 + 6 : height;
+    if (maxHeight < minHeight) {
+      maxHeight = minHeight;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Screen"),
@@ -53,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
-                    height: 80,
+                    height: 60,
                     color: Colors.green,
                   ),
                   Row(
@@ -76,8 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: _focused ? 445 + 6 : 400,
-                      maxHeight: _focused ? 445 + 6 : 400,
+                      minHeight: minHeight,
+                      maxHeight: maxHeight,
                     ),
                     child: MarkdownAutoPreview(
                       expands: true,
