@@ -59,10 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    height: 60,
-                    color: Colors.green,
-                  ),
+                  const TextField(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

@@ -280,13 +280,13 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
     _toolbar = Toolbar(
       controller: _internalController,
       bringEditorToFocus: () {
-        // if (!_textFieldFocusNode.hasFocus) {
-        //   setState(() {
-        //     _focused = true;
-        //   });
-        //
-        //   _textFieldFocusNode.requestFocus();
-        // }
+        if (!_textFieldFocusNode.hasFocus) {
+          setState(() {
+            _focused = true;
+          });
+
+          _textFieldFocusNode.requestFocus();
+        }
       },
     );
 
@@ -305,7 +305,9 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
     return FocusableActionDetector(
       shortcuts: {
         LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB): BoldTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyB): BoldTextIntent(),
         LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI): ItalicTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyI): ItalicTextIntent(),
       },
       actions: {
         BoldTextIntent: CallbackAction<BoldTextIntent>(
