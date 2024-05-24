@@ -302,6 +302,12 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
 
   @override
   Widget build(BuildContext context) {
+    final markdownBody = MarkdownBody(
+      key: const ValueKey<String>("zmarkdown-parse-body"),
+      softLineBreak: true,
+      selectable: true,
+      data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
+    );
     return FocusableActionDetector(
       shortcuts: {
         LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB): BoldTextIntent(),
@@ -361,12 +367,11 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
                 decoration: widget.previewDecoration,
                 padding: widget.previewPadding,
                 height: widget.expands ? double.infinity : null,
-                child: MarkdownBody(
-                  key: const ValueKey<String>("zmarkdown-parse-body"),
-                  softLineBreak: true,
-                  selectable: true,
-                  data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
-                ),
+                child: widget.expands
+                    ? SingleChildScrollView(
+                        child: markdownBody,
+                      )
+                    : markdownBody,
               ),
             ),
     );
