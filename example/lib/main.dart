@@ -68,9 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         inactiveTrackColor: Colors.blue,
                         activeTrackColor: Colors.green,
                         activeColor: Colors.white,
-                        trackOutlineColor: MaterialStateProperty.all(_focused ? Colors.green : Colors.blue),
-                        trackOutlineWidth: MaterialStateProperty.all(10),
-                        thumbIcon: MaterialStateProperty.all(Icon(
+                        trackOutlineColor: WidgetStateProperty.all(
+                            _focused ? Colors.green : Colors.blue),
+                        trackOutlineWidth: WidgetStateProperty.all(10),
+                        thumbIcon: WidgetStateProperty.all(Icon(
                           _focused ? Icons.edit : Icons.visibility,
                           color: _focused ? Colors.green : Colors.blue,
                         )),
@@ -97,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       showLinkInput: false,
                       showImageInput: false,
                       enableOnTapFocus: false,
-                      onFocusChanged: (value) => setState(() => _focused = value),
+                      onFocusChanged: (value) =>
+                          setState(() => _focused = value),
                       previewPadding: const EdgeInsets.all(12),
                       previewDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
