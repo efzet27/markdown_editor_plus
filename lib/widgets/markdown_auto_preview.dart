@@ -20,6 +20,7 @@ class MarkdownAutoPreview extends StatefulWidget {
   const MarkdownAutoPreview({
     super.key,
     this.controller,
+    this.value,
     this.scrollController,
     this.onChanged,
     this.style,
@@ -74,6 +75,8 @@ class MarkdownAutoPreview extends StatefulWidget {
   ///
   /// If null, this widget will create its own [TextEditingController].
   final TextEditingController? controller;
+
+  final String? value;
 
   final ScrollController? scrollController;
 
@@ -265,8 +268,10 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   // Internal parameter
   late TextEditingController _internalController;
 
-  final FocusScopeNode _internalFocus = FocusScopeNode(debugLabel: '_internalFocus');
-  final FocusNode _textFieldFocusNode = FocusNode(debugLabel: '_textFieldFocusNode');
+  final FocusScopeNode _internalFocus =
+      FocusScopeNode(debugLabel: '_internalFocus');
+  final FocusNode _textFieldFocusNode =
+      FocusNode(debugLabel: '_textFieldFocusNode');
 
   late Toolbar _toolbar;
 
@@ -275,6 +280,9 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   @override
   void initState() {
     _internalController = widget.controller ?? TextEditingController();
+    if (widget.value != null) {
+      _internalController.text = widget.value!;
+    }
     _focused = widget.focused;
 
     _toolbar = Toolbar(
@@ -296,6 +304,11 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
   @override
   void didUpdateWidget(covariant MarkdownAutoPreview oldWidget) {
     _focused = widget.focused;
+    if (widget.value != oldWidget.value &&
+        widget.value != _internalController.text &&
+        widget.value != null) {
+      _internalController.text = widget.value!;
+    }
 
     super.didUpdateWidget(oldWidget);
   }
@@ -306,14 +319,20 @@ class _MarkdownAutoPreviewState extends State<MarkdownAutoPreview> {
       key: const ValueKey<String>("zmarkdown-parse-body"),
       softLineBreak: true,
       selectable: true,
-      data: _internalController.text == "" ? "_Markdown text_" : _internalController.text,
+      data: _internalController.text == ""
+          ? "_Markdown text_"
+          : _internalController.text,
     );
     return FocusableActionDetector(
       shortcuts: {
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB): BoldTextIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyB): BoldTextIntent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI): ItalicTextIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyI): ItalicTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyB):
+            BoldTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyB):
+            BoldTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyI):
+            ItalicTextIntent(),
+        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyI):
+            ItalicTextIntent(),
       },
       actions: {
         BoldTextIntent: CallbackAction<BoldTextIntent>(
