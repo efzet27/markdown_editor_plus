@@ -7,7 +7,8 @@ homepage: https://github.com/OmkarDabade/markdown_editor_plus
 repository: https://github.com/OmkarDabade/markdown_editor_plus
 
 environment:
-  sdk: ">=3.4.4 <4.0.0"
+  sdk: '>=3.8.1 <4.0.0'
+  flutter: '>=3.32.0'
 
 dependencies:
   flutter:
